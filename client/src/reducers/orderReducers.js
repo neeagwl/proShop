@@ -28,13 +28,13 @@ export const orderDetailsReducer = (state={loading:true,shippingAddress:{},order
     }
 }
 
-export const orderPayReducer = (state={},action)=>{
+export const orderPayReducer = (state={paidOrder:{}},action)=>{
     switch(action.type){
         case 'ORDER_PAY_REQ':
             return {loading:true}
 
         case 'ORDER_PAY_SUCCESS':
-            return {loading:false, success:true}
+            return {loading:false, success:true, paidOrder:action.payload}
             
         case 'ORDER_PAY_FAIL':
             return {loading:false, error:action.payload}

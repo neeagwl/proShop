@@ -1,18 +1,21 @@
 import React ,{useEffect}from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import { withRouter,Link } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import {Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
 import {logout} from '../actions/userActions';
 
-const Header = () => {
+const Header = ({history}) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector(state=>state.userLogin);
     const {userInfo} = userLogin;
 
-    // useEffect(() => {
-        
-    // }, [userInfo])
+    useEffect(() => {
+        if(!userInfo){
+            history.push('/login');
+        }
+    }, [userInfo,history,dispatch])
 
     const logoutHandler =()=>{
         dispatch(logout());

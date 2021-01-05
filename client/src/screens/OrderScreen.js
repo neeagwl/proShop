@@ -5,8 +5,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import {getOrderDetails} from '../actions/orderActions';
+import {payOrder} from '../actions/orderActions';
 
-const OrderScreen = ({match}) => {
+const OrderScreen = ({match,history}) => {
     const orderId = match.params.id;
     const dispatch = useDispatch()
 
@@ -21,6 +22,11 @@ const OrderScreen = ({match}) => {
       order.itemsPrice = addDecimals(
         order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
       )
+  }
+
+  const paymentHandler=()=>{
+    dispatch(payOrder(orderId));
+    history.push('/');
   }
 
         useEffect(() => {
@@ -131,6 +137,18 @@ const OrderScreen = ({match}) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  <Button
+                      type='button'
+                      variant="info"
+                      onClick={paymentHandler}
+                      className='btn btn-block'
+                    >
+                      Pay Now
+                    </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
