@@ -70,9 +70,10 @@ export const createOrder = (order) => async (dispatch, getState) => {
       })
   
       const {userLogin: {userInfo} } = getState();
+      console.log(userInfo);
       const config = {
         headers: {
-          // 'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
           Authorization : `Bearer ${userInfo.token}`
         },
       }
@@ -95,46 +96,34 @@ export const createOrder = (order) => async (dispatch, getState) => {
     }
   } 
 
-  // export const payOrder = (orderId, paymentResult) => async (
-  //   dispatch,
-  //   getState
-  // ) => {
-  //   try {
-  //     dispatch({
-  //       type: "ORDER_PAY_REQ",
-  //     })
+export const listMyOrders = () => async ( dispatch, getState) => {
+    try {
+      dispatch({
+        type: "ORDER_LIST_MY_REQ",
+      })
   
-  //     const {
-  //       userLogin: { userInfo },
-  //     } = getState()
+      const {userLogin: { userInfo },} = getState()
   
-  //     const config = {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${userInfo.token}`,
-  //       },
-  //     }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
   
-  //     const { data } = await axios.put(
-  //       `/api/orders/${orderId}/pay`,
-  //       config
-  //     )
+      const { data } = await axios.get(`/api/orders/myorders`,config )
   
-  //     dispatch({
-  //       type: "ORDER_PAY_SUCCESS",
-  //       payload: data,
-  //     })
-  //   } catch (error) {
-  //     const message =
-  //       error.response && error.response.data.message
-  //         ? error.response.data.message
-  //         : error.message
-  //     // if (message === 'Not authorized, token failed') {
-  //     //   dispatch(logout())
-  //     // }
-  //     dispatch({
-  //       type: "ORDER_PAY_FAIL",
-  //       payload: message,
-  //     })
-  //   }
-  // }
+      dispatch({
+        type: "ORDER_LIST_MY_SUCCESS",
+        payload: data,
+      })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      dispatch({
+        type: "ORDER_LIST_MY_FAIL",
+        payload: message,
+      })
+    }
+  }

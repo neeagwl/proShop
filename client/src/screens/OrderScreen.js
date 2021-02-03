@@ -14,6 +14,9 @@ const OrderScreen = ({match,history}) => {
   const orderDetails = useSelector(state=>state.orderDetails);
   const {order,loading,error} = orderDetails;
 
+  const orderPay = useSelector(state=>state.orderPay);
+  const {success} = orderPay;
+
   if(!loading){
     const addDecimals = (num) => {
         return (Math.round(num * 100) / 100).toFixed(2)
@@ -26,14 +29,14 @@ const OrderScreen = ({match,history}) => {
 
   const paymentHandler=()=>{
     dispatch(payOrder(orderId));
-    history.push('/');
   }
 
         useEffect(() => {
-            if(!order || order._id !== orderId) {
+            if(!order || order._id !== orderId || success) {
                 dispatch(getOrderDetails(orderId))
             }
-        }, [order, orderId]) 
+
+        }, [order, orderId,success]) 
     
         return (
             loading ? <Loader/> : error ? <Message variant="danger">{error}</Message> :
