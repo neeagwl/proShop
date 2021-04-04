@@ -29,6 +29,7 @@ const OrderScreen = ({match,history}) => {
 
   const paymentHandler=()=>{
     dispatch(payOrder(orderId));
+    history.push('/')
   }
 
         useEffect(() => {

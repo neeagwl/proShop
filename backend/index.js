@@ -5,11 +5,17 @@ dotenv.config();
 require('./config/db.js');
 const {notFound, errorHandler} =require('./middleware/errorMiddleware');
 const app= express();
+const morgan = require('morgan');
 const productRoutes = require('./routes/productRouter');
 const userRoutes = require('./routes/userRouter');
 const orderRoutes = require('./routes/orderRoutes');
 
+
 app.use(express.json());
+
+if( process.env.NODE_ENV ==='development' ){
+    app.use(morgan('dev'));
+}
 
 app.get('/',(req,res)=>{ res.send('API is running...')})
 
